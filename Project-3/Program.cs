@@ -32,8 +32,10 @@ namespace Project_3
             builder.Services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
-            builder.Services.AddScoped<IRepository, Repository>();
-            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddScoped<ITokenService, TokenService>();
 
             var app = builder.Build();

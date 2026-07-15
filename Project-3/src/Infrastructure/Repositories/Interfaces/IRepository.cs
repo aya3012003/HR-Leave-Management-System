@@ -1,8 +1,9 @@
-﻿using System.Linq.Expressions;
+﻿using Project_3.src.Application.Models;
+using System.Linq.Expressions;
 
 namespace Project_3.src.Infrastructure.Repositories.Interfaces
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<T> where T :  BaseEntity
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(int pageNumber, int pageSize);

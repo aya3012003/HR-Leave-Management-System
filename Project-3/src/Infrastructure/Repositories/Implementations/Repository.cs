@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Project_3.src.Application.Models;
 using Project_3.src.Infrastructure.Data.Context;
 using Project_3.src.Infrastructure.Repositories.Interfaces;
 using System.Linq.Expressions;
 
 namespace Project_3.src.Infrastructure.Repositories.Implementations
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T :  BaseEntity
     {
         protected readonly AppDbContext _context;
         protected readonly DbSet<T> _dbSet;
