@@ -1,6 +1,6 @@
 ﻿using Project_3.src.Application.Models;
 
-namespace Project_3.src.Application.Interfaces.IServices
+namespace Project_3.src.Application.Services.Interfaces
 {
     public interface ITokenService
     {
