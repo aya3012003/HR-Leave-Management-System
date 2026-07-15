@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Project_3.src.API.Extensions;
-using Project_3.src.Application.Interfaces.IServices;
+using Project_3.src.Application.Mapping;
 using Project_3.src.Application.Models;
-using Project_3.src.Application.Services;
+using Project_3.src.Application.Services.Implementation;
+using Project_3.src.Application.Services.Interfaces;
 using Project_3.src.Infrastructure.Data.Context;
 using Project_3.src.Infrastructure.Data.Seed;
 using Project_3.src.Infrastructure.identity;
+using Project_3.src.Infrastructure.Repositories.Implementations;
+using Project_3.src.Infrastructure.Repositories.Interfaces;
 
 namespace Project_3
 {
@@ -18,7 +21,7 @@ namespace Project_3
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -29,8 +32,10 @@ namespace Project_3
             builder.Services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
-
-            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddScoped<ITokenService, TokenService>();
 
             var app = builder.Build();

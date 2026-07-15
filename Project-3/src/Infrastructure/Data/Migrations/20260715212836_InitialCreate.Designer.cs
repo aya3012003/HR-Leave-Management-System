@@ -12,8 +12,8 @@ using Project_3.src.Infrastructure.Data.Context;
 namespace Project_3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260715021246_change-dbcontext-toIdentity")]
-    partial class changedbcontexttoIdentity
+    [Migration("20260715212836_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -190,17 +190,16 @@ namespace Project_3.Migrations
                     b.Property<int>("RemainingDays")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("LeaveTypeId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId", "LeaveTypeId")
+                        .IsUnique();
 
                     b.ToTable("EmployeeLeaveBalances");
                 });
@@ -264,10 +263,8 @@ namespace Project_3.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("WorkingDays")
@@ -277,7 +274,7 @@ namespace Project_3.Migrations
 
                     b.HasIndex("LeaveTypeId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("LeaveRequests");
                 });
@@ -318,7 +315,7 @@ namespace Project_3.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -374,6 +371,10 @@ namespace Project_3.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -476,7 +477,9 @@ namespace Project_3.Migrations
 
                     b.HasOne("Project_3.src.Application.Models.User", "User")
                         .WithMany("LeaveBalances")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("LeaveType");
 
@@ -493,7 +496,9 @@ namespace Project_3.Migrations
 
                     b.HasOne("Project_3.src.Application.Models.User", "User")
                         .WithMany("LeaveRequests")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("LeaveType");
 
@@ -504,9 +509,7 @@ namespace Project_3.Migrations
                 {
                     b.HasOne("Project_3.src.Application.Models.Department", "Department")
                         .WithMany("Users")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentId");
 
                     b.Navigation("Department");
                 });
