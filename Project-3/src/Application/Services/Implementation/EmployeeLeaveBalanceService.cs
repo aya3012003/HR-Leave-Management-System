@@ -65,6 +65,16 @@ namespace Project_3.src.Application.Services.Implementation
             await _unitOfWork.LeaveBalances.AddAsync(balance);
             await _unitOfWork.SaveChangesAsync();
 
+            var balanceId = balance.Id;
+
+            balance = await _unitOfWork.LeaveBalances.GetByIdAsync(
+                balanceId,
+                x => x.User,
+                x => x.LeaveType);
+
+            if (balance == null)
+                throw new EmployeeLeaveBalanceNotFoundException(balanceId);
+
             return _mapper.Map<EmployeeLeaveBalanceDto>(balance);
         }
 
@@ -82,7 +92,12 @@ namespace Project_3.src.Application.Services.Implementation
             _unitOfWork.LeaveBalances.Update(balance);
             await _unitOfWork.SaveChangesAsync();
 
-            return _mapper.Map<EmployeeLeaveBalanceDto>(balance);
+            balance = await _unitOfWork.LeaveBalances.GetByIdAsync(
+                id,
+                x => x.User,
+                x => x.LeaveType);
+
+            return _mapper.Map<EmployeeLeaveBalanceDto>(balance!);
         }
 
         public async Task DeleteAsync(int id)

@@ -18,7 +18,6 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
                 .Include(x => x.User)
                 .Include(x => x.LeaveType);
 
-            // Search
             if (!string.IsNullOrWhiteSpace(queryParams.Search))
             {
                 query = query.Where(x =>
@@ -27,7 +26,6 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
                     x.LeaveType.Name.Contains(queryParams.Search));
             }
 
-            // Filter by User
             if (!string.IsNullOrWhiteSpace(queryParams.UserId))
             {
                 query = query.Where(x => x.UserId == queryParams.UserId);
