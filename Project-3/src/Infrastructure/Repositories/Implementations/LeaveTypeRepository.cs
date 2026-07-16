@@ -4,6 +4,7 @@ using Project_3.src.Application.Models;
 using Project_3.src.Infrastructure.Data.Context;
 using Project_3.src.Infrastructure.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Project_3.src.Application.DTOs;
 
 
 
@@ -15,7 +16,7 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
         {
         }
 
-        public async Task<PagedResult<LeaveType>> GetPagedAsync(LeaveTypeQueryParams p)
+        public async Task<PagedResult<LeaveType>> GetPagedAsync(QueryParams p)
         {
             IQueryable<LeaveType> query = _dbSet;
 

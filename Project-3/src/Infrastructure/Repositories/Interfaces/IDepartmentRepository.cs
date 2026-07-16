@@ -4,8 +4,9 @@ using Project_3.src.Application.Models;
 
 namespace Project_3.src.Infrastructure.Repositories.Interfaces
 {
-    public interface ILeaveTypeRepository : IRepository<LeaveType>
+    public interface IDepartmentRepository : IRepository<Department>
     {
-        Task<PagedResult<LeaveType>> GetPagedAsync(QueryParams p);
+        Task<PagedResult<Department>> GetPagedAsync(QueryParams query);
+
     }
 }

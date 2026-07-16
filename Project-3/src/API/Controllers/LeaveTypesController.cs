@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Project_3.src.Application.DTOs;
 using Project_3.src.Application.DTOs.LeaveTypeDto;
-using Project_3.src.Application.Interfaces.IServices;
+using Project_3.src.Application.Services.Interfaces;
 
 namespace Project_3.src.API.Controllers
 {
@@ -17,7 +18,7 @@ namespace Project_3.src.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] LeaveTypeQueryParams query)
+        public async Task<IActionResult> GetAll([FromQuery] QueryParams query)
         {
             var result = await _service.GetPagedAsync(query);
 

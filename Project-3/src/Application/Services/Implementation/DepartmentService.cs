@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Project_3.src.Application.DTOs;
+using Project_3.src.Application.DTOs.Common;
 using Project_3.src.Application.DTOs.DepartmentDTOs;
 using Project_3.src.Application.ExceptionHandling;
 using Project_3.src.Application.Models;
@@ -18,21 +20,18 @@ namespace Project_3.src.Application.Services.Implementation
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<DepartmentDto>> GetAllAsync()
+
+        public async Task<PagedResult<DepartmentDto>> GetPagedAsync( QueryParams query)
         {
-            var departments = await _unitOfWork.Departments.GetAllAsync();
+            var result = await _unitOfWork.Departments.GetPagedAsync(query);
 
-            return _mapper.Map<IEnumerable<DepartmentDto>>(departments);
-        }
-
-        public async Task<(IEnumerable<DepartmentDto> Items, int TotalCount)> GetPagedAsync(int pageNumber, int pageSize)
-        {
-            var (departments, totalCount) =
-                await _unitOfWork.Departments.GetPagedAsync(pageNumber, pageSize);
-
-            var dtos = _mapper.Map<IEnumerable<DepartmentDto>>(departments);
-
-            return (dtos, totalCount);
+            return new PagedResult<DepartmentDto>
+            {
+                Items = _mapper.Map<List<DepartmentDto>>(result.Items),
+                TotalCount = result.TotalCount,
+                PageNumber = result.PageNumber,
+                PageSize = result.PageSize
+            };
         }
 
         public async Task<DepartmentDto> GetByIdAsync(int id)

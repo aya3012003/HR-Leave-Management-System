@@ -1,7 +1,7 @@
 ﻿using Project_3.src.Application.DTOs.Common;
 using Project_3.src.Application.DTOs.EmployeeDTOs;
 
-namespace Project_3.src.Application.Interfaces.IServices
+namespace Project_3.src.Application.Services.Interfaces
 {
     public interface IEmployeeService
     {
