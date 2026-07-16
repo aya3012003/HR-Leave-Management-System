@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Project_3.src.API.Extensions;
+using Project_3.src.API.Middleware;
 using Project_3.src.Application.Interfaces.IServices;
 using Project_3.src.Application.Mapping;
 using Project_3.src.Application.Models;
@@ -41,12 +42,14 @@ namespace Project_3
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddScoped<ILeaveTypeRepository,LeaveTypeRepository>();
             builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
-
-            //extentions
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddProblemDetails();
             builder.Services.AddJwtAuthentication(builder.Configuration);
           
 
             var app = builder.Build();
+
+            app.UseExceptionHandler();
 
             await app.SeedRolesAsync();
 
