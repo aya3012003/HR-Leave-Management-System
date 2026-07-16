@@ -1,4 +1,5 @@
-﻿using Project_3.src.Infrastructure.Data.Context;
+﻿using Project_3.src.Application.Models;
+using Project_3.src.Infrastructure.Data.Context;
 using Project_3.src.Infrastructure.Repositories.Interfaces;
 
 namespace Project_3.src.Infrastructure.Repositories.Implementations
@@ -6,13 +7,31 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
     public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
+
+     
+
+        public IDepartmentRepository Departments  { get; }
+
+        public IRepository<LeaveRequest> LeaveRequests { get; }
+
+          public   ILeaveTypeRepository LeaveTypes { get; }
+
+        public IEmployeeLeaveBalanceRepository LeaveBalances { get; }
+
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
+
+
+            Departments = new DepartmentRepository(context);
+            LeaveRequests = new Repository<LeaveRequest>(context);
+            LeaveTypes = new LeaveTypeRepository(context);
+            LeaveBalances = new EmployeeLeaveBalanceRepository(context);
         }
-        public async Task<int> SaveChangesAsync()
+
+        public Task<int> SaveChangesAsync()
         {
-            return await _context.SaveChangesAsync();
+            return _context.SaveChangesAsync();
         }
 
     }

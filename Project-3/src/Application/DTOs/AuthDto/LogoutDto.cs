@@ -1,4 +1,4 @@
-﻿namespace Project_3.src.Application.DTOs
+﻿namespace Project_3.src.Application.DTOs.AuthDto
 {
     public class LogoutDto
     {

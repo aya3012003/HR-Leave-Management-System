@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Project_3.src.Application.DTOs.DepartmentDTOs;
+using Project_3.src.Application.DTOs.LeaveTypeDto;
 using Project_3.src.Application.Models;
 
 namespace Project_3.src.Application.Mapping
@@ -11,6 +12,10 @@ namespace Project_3.src.Application.Mapping
             CreateMap<Department, DepartmentDto>().ReverseMap();
             CreateMap<CreateDepartmentDto, Department>().ReverseMap();
             CreateMap<UpdateDepartmentDto, Department>().ReverseMap();
+
+            CreateMap<LeaveType, LeaveTypeDto>();
+            CreateMap<CreateLeaveTypeDto, LeaveType>();
+            CreateMap<UpdateLeaveTypeDto, LeaveType>();
         }
 
     }

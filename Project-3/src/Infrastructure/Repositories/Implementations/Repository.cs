@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Project_3.src.Application.DTOs;
+using Project_3.src.Application.DTOs.Common;
 using Project_3.src.Application.Models;
 using Project_3.src.Infrastructure.Data.Context;
 using Project_3.src.Infrastructure.Repositories.Interfaces;
@@ -16,24 +18,9 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
             _dbSet = context.Set<T>();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
-        {
-            return await _dbSet.ToListAsync();
-        }
-        public async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(int pageNumber, int pageSize)
-        {
-            var totalCount = await _dbSet.CountAsync();
-
-            var items = await _dbSet
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-
-            return (items, totalCount);
-        }
         public async Task<T?> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes)
         {
-            IQueryable<T> query = _dbSet;
+            IQueryable<T> query = _dbSet.AsNoTracking();
 
             foreach (var include in includes)
             {
@@ -45,7 +32,7 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
 
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _dbSet.Where(predicate).ToListAsync();
+            return await _dbSet.AsNoTracking().Where(predicate).ToListAsync();
         }
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
         {
@@ -53,7 +40,7 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
         }
         public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _dbSet.FirstOrDefaultAsync(predicate);
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
         }
 
         public async Task AddAsync(T entity)

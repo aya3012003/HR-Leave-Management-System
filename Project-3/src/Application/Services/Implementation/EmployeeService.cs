@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Project_3.src.Application.DTOs.Common;
 using Project_3.src.Application.DTOs.EmployeeDTOs;
-using Project_3.src.Application.Interfaces.IServices;
 using Project_3.src.Application.Models;
+using Project_3.src.Application.Services.Interfaces;
 using Project_3.src.Infrastructure.Data.Context;
 
-namespace Project_3.src.Application.Services
+namespace Project_3.src.Application.Services.Implementation
 {
     public class EmployeeService : IEmployeeService
     {

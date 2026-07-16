@@ -5,8 +5,6 @@ namespace Project_3.src.Infrastructure.Repositories.Interfaces
 {
     public interface IRepository<T> where T :  BaseEntity
     {
-        Task<IEnumerable<T>> GetAllAsync();
-        Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(int pageNumber, int pageSize);
         Task<T?> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes);
 
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
