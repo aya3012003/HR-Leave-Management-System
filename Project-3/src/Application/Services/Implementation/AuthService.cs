@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Project_3.src.Application.DTOs;
 using Project_3.src.Application.Models;
 using Project_3.src.Infrastructure.Data.Context;
 using Project_3.src.Infrastructure.identity;
 using Microsoft.EntityFrameworkCore;
 using Project_3.src.Application.Services.Interfaces;
+using Project_3.src.Application.DTOs.AuthDto;
 
 namespace Project_3.src.Application.Services.Implementation
 {

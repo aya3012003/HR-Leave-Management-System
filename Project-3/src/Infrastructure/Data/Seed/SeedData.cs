@@ -157,6 +157,10 @@ namespace Project_3.src.Infrastructure.Data.Seed
                 }
 
                 await context.EmployeeLeaveBalances.AddRangeAsync(balances);
+                foreach (var b in balances)
+                {
+                    Console.WriteLine($"{b.UserId} - {b.LeaveTypeId}");
+                }
                 await context.SaveChangesAsync();
             }
         }

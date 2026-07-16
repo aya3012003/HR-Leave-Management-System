@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Project_3.src.API.Extensions;
+using Project_3.src.Application.Interfaces.IServices;
 using Project_3.src.Application.Mapping;
 using Project_3.src.Application.Models;
+using Project_3.src.Application.Services;
 using Project_3.src.Application.Services.Implementation;
 using Project_3.src.Application.Services.Interfaces;
 using Project_3.src.Infrastructure.Data.Context;
@@ -38,6 +40,10 @@ namespace Project_3
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
+            //extentions
+            builder.Services.AddJwtAuthentication(builder.Configuration);
+          
 
             var app = builder.Build();
 

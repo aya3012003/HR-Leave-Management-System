@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Project_3.src.Application.DTOs;
+using Project_3.src.Application.DTOs.AuthDto;
 using Project_3.src.Application.Services.Interfaces;
 
 namespace Project_3.src.API.Controllers

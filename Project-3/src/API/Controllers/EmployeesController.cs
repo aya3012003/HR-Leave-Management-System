@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Project_3.src.Application.DTOs.EmployeeDTOs;
 using Project_3.src.Application.Interfaces.IServices;
 using Project_3.src.Application.Models;
-using Project_3.src.Shared.Constants;
+
 using System.Security.Claims;
 
 namespace Project_3.src.API.Controllers
@@ -21,7 +21,7 @@ namespace Project_3.src.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = $"{Roles.Admin},{Roles.Manager}")]
+        [Authorize(Roles = $"{"Admin"},{"Manager"}")]
         public async Task<IActionResult> GetAll(
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10,
@@ -45,7 +45,7 @@ namespace Project_3.src.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = $"{Roles.Admin},{Roles.Manager}")]
+        [Authorize(Roles = $"{"Admin"},{"Manager"}")]
         public async Task<IActionResult> GetById(string id)
         {
             var employee = await _employeeService.GetEmployeeByIdAsync(id);
@@ -55,7 +55,7 @@ namespace Project_3.src.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = Roles.Admin)]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] CreateEmployeeDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -67,7 +67,7 @@ namespace Project_3.src.API.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = Roles.Admin)]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(string id, [FromBody] UpdateEmployeeDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -94,7 +94,7 @@ namespace Project_3.src.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = Roles.Admin)]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             var success = await _employeeService.DeleteEmployeeAsync(id);
