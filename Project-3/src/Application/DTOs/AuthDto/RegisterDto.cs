@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Project_3.src.Application.DTOs
+namespace Project_3.src.Application.DTOs.AuthDto
 {
     public class RegisterDto
     {

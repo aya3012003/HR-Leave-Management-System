@@ -12,8 +12,8 @@ using Project_3.src.Infrastructure.Data.Context;
 namespace Project_3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260715212836_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260716110311_initialCreate")]
+    partial class initialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
