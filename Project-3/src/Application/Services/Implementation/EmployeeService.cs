@@ -6,7 +6,7 @@ using Project_3.src.Application.Interfaces.IServices;
 using Project_3.src.Application.Models;
 using Project_3.src.Infrastructure.Data.Context;
 
-namespace Project_3.src.Application.Services
+namespace Project_3.src.Application.Services.Implementation
 {
     public class EmployeeService : IEmployeeService
     {
