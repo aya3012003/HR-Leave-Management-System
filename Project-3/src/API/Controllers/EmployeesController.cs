@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project_3.src.Application.DTOs.EmployeeDTOs;
-using Project_3.src.Application.Interfaces.IServices;
 using Project_3.src.Application.Models;
-
+using Project_3.src.Application.Services.Interfaces;
 using System.Security.Claims;
 
 namespace Project_3.src.API.Controllers

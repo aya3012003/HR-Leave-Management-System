@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Project_3.src.Application.DTOs;
 using Project_3.src.Application.DTOs.DepartmentDTOs;
 using Project_3.src.Application.Services.Interfaces;
 
@@ -19,17 +20,11 @@ namespace Project_3.src.API.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetAll([FromQuery] QueryParams query)
         {
-            var (departments, totalCount) = await _service.GetPagedAsync(pageNumber, pageSize);
+            var result = await _service.GetPagedAsync(query);
 
-            return Ok(new
-            {
-                Items = departments,
-                TotalCount = totalCount,
-                PageNumber = pageNumber,
-                PageSize = pageSize
-            });
+            return Ok(result);
         }
 
         [HttpGet("{id}")]

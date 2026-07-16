@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
+using Project_3.src.Application.DTOs;
 using Project_3.src.Application.DTOs.Common;
 using Project_3.src.Application.DTOs.LeaveTypeDto;
 using Project_3.src.Application.ExceptionHandling;
-using Project_3.src.Application.Interfaces.IServices;
 using Project_3.src.Application.Models;
+using Project_3.src.Application.Services.Interfaces;
 using Project_3.src.Infrastructure.Repositories.Interfaces;
 
 namespace Project_3.src.Application.Services.Implementation
@@ -20,7 +21,7 @@ namespace Project_3.src.Application.Services.Implementation
             _mapper = mapper;
         }
 
-        public async Task<PagedResult<LeaveTypeDto>> GetPagedAsync(LeaveTypeQueryParams query)
+        public async Task<PagedResult<LeaveTypeDto>> GetPagedAsync(QueryParams query)
         {
             var result = await _unitOfWork.LeaveTypes.GetPagedAsync(query);
 

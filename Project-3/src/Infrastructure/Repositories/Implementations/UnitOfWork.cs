@@ -10,23 +10,23 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
 
      
 
-        public IRepository<Department> Departments { get; }
+        public IDepartmentRepository Departments  { get; }
 
         public IRepository<LeaveRequest> LeaveRequests { get; }
 
           public   ILeaveTypeRepository LeaveTypes { get; }
 
-        public IRepository<EmployeeLeaveBalance> LeaveBalances { get; }
+        public IEmployeeLeaveBalanceRepository LeaveBalances { get; }
 
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
 
-           
-            Departments = new Repository<Department>(context);
+
+            Departments = new DepartmentRepository(context);
             LeaveRequests = new Repository<LeaveRequest>(context);
             LeaveTypes = new LeaveTypeRepository(context);
-            LeaveBalances = new Repository<EmployeeLeaveBalance>(context);
+            LeaveBalances = new EmployeeLeaveBalanceRepository(context);
         }
 
         public Task<int> SaveChangesAsync()

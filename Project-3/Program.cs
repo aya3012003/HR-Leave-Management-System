@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Project_3.src.API.Extensions;
 using Project_3.src.API.Middleware;
-using Project_3.src.Application.Interfaces.IServices;
 using Project_3.src.Application.Mapping;
 using Project_3.src.Application.Models;
 using Project_3.src.Application.Services.Implementation;
@@ -36,12 +35,16 @@ namespace Project_3
                 .AddDefaultTokenProviders();
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddScoped<ILeaveTypeRepository,LeaveTypeRepository>();
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            builder.Services.AddScoped<IEmployeeLeaveBalanceRepository, EmployeeLeaveBalanceRepository>();
+
             builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<IEmployeeLeaveBalanceService, EmployeeLeaveBalanceService>();
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
             builder.Services.AddProblemDetails();
             builder.Services.AddJwtAuthentication(builder.Configuration);
@@ -70,6 +73,7 @@ namespace Project_3
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
