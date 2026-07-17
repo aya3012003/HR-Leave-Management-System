@@ -9,4 +9,8 @@
     {
         public InsufficientLeaveBalanceException() : base("Employee has insufficient leave balance for this request.") { }
     }
+    public class InvalidLeaveRequestActionException : ConflictException
+    {
+        public InvalidLeaveRequestActionException(string message) : base(message) { }
+    }
 }

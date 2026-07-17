@@ -12,7 +12,7 @@ namespace Project_3.src.API.Controllers
     {
         private readonly IDashboardService _service;
 
-        public ReportsController(IDashboardService service)
+        public DashboardController(IDashboardService service)
         {
             _service = service;
         }
