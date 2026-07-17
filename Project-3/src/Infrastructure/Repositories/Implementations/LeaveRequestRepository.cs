@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project_3.src.Application.DTOs.Common;
+using Project_3.src.Application.DTOs.LeaveRequestDTOs;
 using Project_3.src.Application.Models;
 using Project_3.src.Infrastructure.Data.Context;
 using Project_3.src.Infrastructure.Repositories.Interfaces;
