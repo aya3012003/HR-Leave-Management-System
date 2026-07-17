@@ -33,6 +33,7 @@ namespace Project_3
             builder.Services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -45,9 +46,13 @@ namespace Project_3
             builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddScoped<IEmployeeLeaveBalanceService, EmployeeLeaveBalanceService>();
+            builder.Services.AddScoped<IDashboardService, DashboardService>();
+
+
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
             builder.Services.AddProblemDetails();
             builder.Services.AddJwtAuthentication(builder.Configuration);
+            
           
 
             var app = builder.Build();
