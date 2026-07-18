@@ -53,7 +53,10 @@ namespace Project_3
 
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
             builder.Services.AddProblemDetails();
+          //extensions
             builder.Services.AddJwtAuthentication(builder.Configuration);
+            builder.Services.AddApiConfiguration();
+            builder.Services.AddSwaggerDocumentation();
 
 
 
@@ -80,6 +83,8 @@ namespace Project_3
             }
 
             app.UseHttpsRedirection();
+            //middleware
+            app.UseRateLimiting();
             app.UseAuthentication();
 
             app.UseAuthorization();
