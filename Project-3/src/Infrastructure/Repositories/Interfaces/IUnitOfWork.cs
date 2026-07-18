@@ -8,8 +8,7 @@ namespace Project_3.src.Infrastructure.Repositories.Interfaces
 
 
         IDepartmentRepository Departments { get; }
-        IRepository<LeaveRequest> LeaveRequests { get; }
-
+        ILeaveRequestRepository LeaveRequests { get; }
         ILeaveTypeRepository LeaveTypes { get; }
 
         IEmployeeLeaveBalanceRepository LeaveBalances { get; }

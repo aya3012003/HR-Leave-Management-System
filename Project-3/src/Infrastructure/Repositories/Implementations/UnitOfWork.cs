@@ -8,13 +8,11 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
     {
         private readonly AppDbContext _context;
 
-     
+        public IDepartmentRepository Departments { get; }
 
-        public IDepartmentRepository Departments  { get; }
+        public ILeaveRequestRepository LeaveRequests { get; }
 
-        public IRepository<LeaveRequest> LeaveRequests { get; }
-
-          public   ILeaveTypeRepository LeaveTypes { get; }
+        public ILeaveTypeRepository LeaveTypes { get; }
 
         public IEmployeeLeaveBalanceRepository LeaveBalances { get; }
 
@@ -24,7 +22,7 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
 
 
             Departments = new DepartmentRepository(context);
-            LeaveRequests = new Repository<LeaveRequest>(context);
+            LeaveRequests = new LeaveRequestRepository(context);
             LeaveTypes = new LeaveTypeRepository(context);
             LeaveBalances = new EmployeeLeaveBalanceRepository(context);
         }
