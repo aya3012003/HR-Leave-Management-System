@@ -39,5 +39,14 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
                 PageSize = query.PageSize
             };
         }
+        public async Task<IEnumerable<LeaveRequest>> GetAllWithUserDepartmentAsync()
+        {
+            return await _dbSet
+                .Include(r => r.User)
+                .ThenInclude(u => u.Department)
+                .Include(r => r.LeaveType)
+                .AsNoTracking()
+                .ToListAsync();
+        }
     }
 }

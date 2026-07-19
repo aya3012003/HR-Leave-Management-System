@@ -10,7 +10,7 @@ namespace Project_3.src.Application.Services.Interfaces
         Task<EmployeeLeaveBalanceDto> GetByIdAsync(int id);
         Task<IEnumerable<EmployeeLeaveBalanceDto>> GetMyBalancesAsync(string userId);
 
-        Task<EmployeeLeaveBalanceDto> CreateAsync(CreateEmployeeLeaveBalanceDto dto);
+       
 
         Task<EmployeeLeaveBalanceDto> UpdateAsync(int id, UpdateEmployeeLeaveBalanceDto dto);
 

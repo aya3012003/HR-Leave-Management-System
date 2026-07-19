@@ -4,31 +4,43 @@ using Project_3.src.Application.Models;
 using Project_3.src.Application.Services.Interfaces;
 using System.Security.Claims;
 
-namespace Project_3.src.API.Controllers
+/// <summary>
+/// Provides endpoints for employees to view their own leave balances.
+/// Accessible only by users with the Employee role.
+/// </summary>
+[ApiController]
+[Route("api/my-leave-balances")]
+[Authorize(Roles = "Employee")]
+public class MyLeaveBalancesController : ControllerBase
 {
-    [ApiController]
-    [Route("api/my-leave-balances")]
-    [Authorize(Roles = "Employee")]
-    public class MyLeaveBalancesController : ControllerBase
+    private readonly IEmployeeLeaveBalanceService _service;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MyLeaveBalancesController"/> class.
+    /// </summary>
+    /// <param name="service">Employee leave balance service.</param>
+    public MyLeaveBalancesController(IEmployeeLeaveBalanceService service)
     {
-        private readonly IEmployeeLeaveBalanceService _service;
+        _service = service;
+    }
 
-        public MyLeaveBalancesController(IEmployeeLeaveBalanceService service)
-        {
-            _service = service;
-        }
+    /// <summary>
+    /// Retrieves the leave balances of the currently authenticated employee.
+    /// </summary>
+    /// <returns>The authenticated employee's leave balances.</returns>
+    /// <response code="200">Leave balances retrieved successfully.</response>
+    /// <response code="401">User is not authenticated.</response>
+    /// <response code="403">User is not authorized.</response>
+    [HttpGet]
+    public async Task<IActionResult> GetMyBalances()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        [HttpGet]
-        public async Task<IActionResult> GetMyBalances()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized();
 
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized();
+        var balances = await _service.GetMyBalancesAsync(userId);
 
-            var balances = await _service.GetMyBalancesAsync(userId);
-
-            return Ok(balances);
-        }
+        return Ok(balances);
     }
 }
