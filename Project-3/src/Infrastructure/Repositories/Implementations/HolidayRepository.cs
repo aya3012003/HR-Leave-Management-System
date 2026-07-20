@@ -14,10 +14,10 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
         public async Task<List<Holiday>> GetByYearAsync(string countryCode , int year )
         {
             return await _dbSet
-                .Where(x => x.Year == year &&
-                            x.CountryCode == countryCode)
-                .OrderBy(x => x.Date)
-                .ToListAsync();
+                    .AsNoTracking()
+                    .Where(x => x.Year == year && x.CountryCode == countryCode)
+                    .OrderBy(x => x.Date)
+                    .ToListAsync();
         }
 
         public async Task<bool> ExistsForYearAsync(string countryCode, int year)
