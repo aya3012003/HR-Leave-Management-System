@@ -46,17 +46,20 @@ namespace Project_3.src.Application.Services.Implementation
                 count = x.Count()
             });
         }
-        // TODO: Load User.Department using ThenInclude in LeaveRequestRepository.
+       
         // Returns the total approved leave days for each department.
-        public async  Task<IEnumerable<DepartmentLeaveUsageDto>> GetLeaveDaysOfDepartment()
+        public async Task<IEnumerable<DepartmentLeaveUsageDto>> GetLeaveDaysOfDepartment()
         {
-            var requests = await _unitOfWork.LeaveRequests.GetAllAsync(l => l.User);
-            return requests.Where(x => x.Status == LeaveStatus.Approved).GroupBy(x=>x.User.Department?.Name).Select(x => new DepartmentLeaveUsageDto
-            {
-                DepartmentName = x.Key,
-                TotalDays = x.Sum(y => y.WorkingDays)
-            });
+            var requests = await _unitOfWork.LeaveRequests.GetAllWithUserDepartmentAsync();
 
+            return requests
+                .Where(x => x.Status == LeaveStatus.Approved)
+                .GroupBy(x => x.User.Department!.Name)
+                .Select(x => new DepartmentLeaveUsageDto
+                {
+                    DepartmentName = x.Key,
+                    TotalDays = x.Sum(y => y.WorkingDays)
+                });
         }
 
         public async Task<IEnumerable<EmployeeLeaveHistoryDto>> GetEmployeeLeaveHistoryAsync(string userId)

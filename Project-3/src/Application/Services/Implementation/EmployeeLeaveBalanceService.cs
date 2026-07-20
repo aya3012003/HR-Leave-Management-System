@@ -51,33 +51,7 @@ namespace Project_3.src.Application.Services.Implementation
             var balances = await _unitOfWork.LeaveBalances.GetByUserIdAsync(userId);
             return _mapper.Map<IEnumerable<EmployeeLeaveBalanceDto>>(balances);
         }
-        public async Task<EmployeeLeaveBalanceDto> CreateAsync(CreateEmployeeLeaveBalanceDto dto)
-        {
-            var exists = await _unitOfWork.LeaveBalances.AnyAsync(x =>
-                x.UserId == dto.UserId &&
-                x.LeaveTypeId == dto.LeaveTypeId);
-
-            if (exists)
-                throw new DuplicateEmployeeLeaveBalanceException();
-
-            var balance = _mapper.Map<EmployeeLeaveBalance>(dto);
-
-            await _unitOfWork.LeaveBalances.AddAsync(balance);
-            await _unitOfWork.SaveChangesAsync();
-
-            var balanceId = balance.Id;
-
-            balance = await _unitOfWork.LeaveBalances.GetByIdAsync(
-                balanceId,
-                x => x.User,
-                x => x.LeaveType);
-
-            if (balance == null)
-                throw new EmployeeLeaveBalanceNotFoundException(balanceId);
-
-            return _mapper.Map<EmployeeLeaveBalanceDto>(balance);
-        }
-
+     
         public async Task<EmployeeLeaveBalanceDto> UpdateAsync(
             int id,
             UpdateEmployeeLeaveBalanceDto dto)
@@ -110,5 +84,7 @@ namespace Project_3.src.Application.Services.Implementation
             _unitOfWork.LeaveBalances.Delete(balance);
             await _unitOfWork.SaveChangesAsync();
         }
+
+       
     }
 }

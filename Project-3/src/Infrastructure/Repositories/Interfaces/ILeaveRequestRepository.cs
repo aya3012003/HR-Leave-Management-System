@@ -7,5 +7,6 @@ namespace Project_3.src.Infrastructure.Repositories.Interfaces
     public interface ILeaveRequestRepository : IRepository<LeaveRequest>
     {
         Task<PagedResult<LeaveRequest>> GetPagedAsync(LeaveRequestQueryParams query);
+        Task<IEnumerable<LeaveRequest>> GetAllWithUserDepartmentAsync();
     }
 }
