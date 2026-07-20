@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Project_3.src.Application.DTOs;
 using Project_3.src.Application.DTOs.DepartmentDTOs;
 using Project_3.src.Application.DTOs.EmployeeLeaveBalanceDtos;
 using Project_3.src.Application.DTOs.LeaveRequestDTOs;
@@ -35,6 +36,8 @@ namespace Project_3.src.Application.Mapping
                     opt => opt.MapFrom(src => src.LeaveType.Name))
                 .ForMember(dest => dest.Status,
                     opt => opt.MapFrom(src => src.Status.ToString()));
+
+            CreateMap<Holiday, HolidayApiDto>().ReverseMap();
 
         }
 

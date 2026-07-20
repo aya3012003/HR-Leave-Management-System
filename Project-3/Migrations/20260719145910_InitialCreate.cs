@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Project_3.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -45,8 +45,9 @@ namespace Project_3.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateOnly>(type: "date", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CountryCode = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CountryCode = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -349,6 +350,12 @@ namespace Project_3.Migrations
                 name: "IX_EmployeeLeaveBalances_UserId_LeaveTypeId",
                 table: "EmployeeLeaveBalances",
                 columns: new[] { "UserId", "LeaveTypeId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Holidays_Date_CountryCode",
+                table: "Holidays",
+                columns: new[] { "Date", "CountryCode" },
                 unique: true);
 
             migrationBuilder.CreateIndex(

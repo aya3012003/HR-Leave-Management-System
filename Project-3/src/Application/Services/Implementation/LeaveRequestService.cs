@@ -17,15 +17,20 @@ namespace Project_3.src.Application.Services.Implementation
             private readonly IUnitOfWork _unitOfWork;
             private readonly IMapper _mapper;
             private readonly UserManager<User> _userManager;
+            private readonly ILeaveCalculationService _leaveCalculationService;
+        public LeaveRequestService(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<User> userManager,
+            ILeaveCalculationService leaveCalculationService)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _userManager = userManager;
+            _leaveCalculationService = leaveCalculationService;
+        }
 
-            public LeaveRequestService(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager)
-            {
-                _unitOfWork = unitOfWork;
-                _mapper = mapper;
-                _userManager = userManager;
-            }
-
-            public async Task<PagedResult<LeaveRequestDto>> GetAllAsync(LeaveRequestQueryParams query)
+        public async Task<PagedResult<LeaveRequestDto>> GetAllAsync(LeaveRequestQueryParams query)
             {
                 var requests = await _unitOfWork.LeaveRequests.GetPagedAsync(query);
                 return new PagedResult<LeaveRequestDto>
@@ -55,8 +60,10 @@ namespace Project_3.src.Application.Services.Implementation
                 if (dto.EndDate < dto.StartDate)
                     throw new ValidationException("End date cannot be before start date.");
 
-                int workingDays = CalculateWorkingDays(dto.StartDate, dto.EndDate);
-                if (workingDays <= 0)
+            int workingDays = await _leaveCalculationService.CalculateLeaveDaysAsync(
+                dto.StartDate,
+                dto.EndDate); 
+            if (workingDays <= 0)
                     throw new ValidationException("Leave request must contain at least one working day.");
 
                 var balance = await _unitOfWork.LeaveBalances.GetByUserAndLeaveTypeAsync(userId, dto.LeaveTypeId);
