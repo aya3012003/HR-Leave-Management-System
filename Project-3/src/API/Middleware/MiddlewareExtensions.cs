@@ -6,5 +6,8 @@
         {
             return app.UseMiddleware<RateLimitingMiddleware>();
         }
+        public static IApplicationBuilder UseRequestTiming(
+       this IApplicationBuilder app) =>
+        app.UseMiddleware<RequestTimingMiddleware>();
     }
 }
