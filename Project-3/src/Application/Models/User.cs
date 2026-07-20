@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Project_3.src.Infrastructure.identity;
-using Project_3.src.Shared;
+
 using System.ComponentModel.DataAnnotations;
 
 namespace Project_3.src.Application.Models

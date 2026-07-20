@@ -1,4 +1,4 @@
-﻿using Project_3.src.Shared.Enums;
+﻿using Project_3.src.Infrastructure.Shared.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Project_3.src.Application.Models

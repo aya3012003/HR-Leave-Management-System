@@ -6,7 +6,7 @@ using Project_3.src.Application.Models;
 using Project_3.src.Application.Services.Interfaces;
 using Project_3.src.Infrastructure.Repositories.Implementations;
 using Project_3.src.Infrastructure.Repositories.Interfaces;
-using Project_3.src.Shared.Enums;
+using Project_3.src.Infrastructure.Shared.Enums;
 
 namespace Project_3.src.Application.Services.Implementation
 {
