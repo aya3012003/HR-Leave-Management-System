@@ -14,6 +14,7 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
 
         public ILeaveTypeRepository LeaveTypes { get; }
 
+        public IHolidayRepository Holidays { get; }
         public IEmployeeLeaveBalanceRepository LeaveBalances { get; }
 
         public UnitOfWork(AppDbContext context)
@@ -25,6 +26,7 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
             LeaveRequests = new LeaveRequestRepository(context);
             LeaveTypes = new LeaveTypeRepository(context);
             LeaveBalances = new EmployeeLeaveBalanceRepository(context);
+            Holidays = new HolidayRepository(context);
         }
 
         public Task<int> SaveChangesAsync()

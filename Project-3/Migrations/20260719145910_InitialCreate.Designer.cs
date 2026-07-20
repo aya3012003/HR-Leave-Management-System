@@ -12,8 +12,8 @@ using Project_3.src.Infrastructure.Data.Context;
 namespace Project_3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260716110311_initialCreate")]
-    partial class initialCreate
+    [Migration("20260719145910_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -222,10 +222,16 @@ namespace Project_3.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Date", "CountryCode")
+                        .IsUnique();
 
                     b.ToTable("Holidays");
                 });
