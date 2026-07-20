@@ -43,7 +43,6 @@ namespace Project_3
             builder.Services.AddScoped<IHolidayRepository, HolidayRepository>();
             builder.Services.AddScoped<IEmployeeLeaveBalanceRepository, EmployeeLeaveBalanceRepository>();
             builder.Services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
-
             builder.Services.AddScoped<IHolidayService, HolidayService>();
             builder.Services.AddHttpClient<IHolidayApiService, HolidayApiService>();
             builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
