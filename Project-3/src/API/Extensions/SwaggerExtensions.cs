@@ -1,7 +1,5 @@
-﻿using Microsoft.OpenApi;
-using System.Reflection;
-
-
+﻿using System.Reflection;
+using Microsoft.OpenApi.Models;
 
 namespace Project_3.src.API.Extensions
 {
@@ -41,17 +39,21 @@ namespace Project_3.src.API.Extensions
                     Description = "Enter: Bearer {your token}"
                 });
 
-                c.AddSecurityRequirement(document =>
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    var requirement = new OpenApiSecurityRequirement();
-
-                   
-                    var schemeReference = new OpenApiSecuritySchemeReference(schemeId, document);
-
-                    requirement.Add(schemeReference, new List<string>());
-
-                    return requirement;
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = schemeId
+                            }
+                        },
+                        new List<string>()
+                    }
                 });
+
             });
 
             return services;
