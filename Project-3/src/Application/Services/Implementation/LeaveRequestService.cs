@@ -6,7 +6,7 @@ using Project_3.src.Application.ExceptionHandling;
 using Project_3.src.Application.Models;
 using Project_3.src.Application.Services.Interfaces;
 using Project_3.src.Infrastructure.Repositories.Interfaces;
-using Project_3.src.Shared.Enums;
+using Project_3.src.Infrastructure.Shared.Enums;
 using System.ComponentModel.DataAnnotations;
 using static Project_3.src.Application.Services.Implementation.LeaveRequestService;
 

@@ -1,4 +1,4 @@
-﻿namespace Project_3.src.Shared.Enums
+﻿namespace Project_3.src.Infrastructure.Shared.Enums
 {
     public enum EmployeeType
     {

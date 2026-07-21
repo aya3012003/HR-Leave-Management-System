@@ -18,7 +18,7 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
 
         public async Task<PagedResult<LeaveType>> GetPagedAsync(QueryParams p)
         {
-            IQueryable<LeaveType> query = _dbSet;
+            IQueryable<LeaveType> query = _dbSet.AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(p.Search))
             {

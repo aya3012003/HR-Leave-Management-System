@@ -55,6 +55,7 @@ namespace Project_3.src.API.Extensions
                         Array.Empty<string>()
                     }
                 });
+
             });
 
             return services;

@@ -13,6 +13,7 @@ using Project_3.src.Infrastructure.Data.Seed;
 using Project_3.src.Infrastructure.identity;
 using Project_3.src.Infrastructure.Repositories.Implementations;
 using Project_3.src.Infrastructure.Repositories.Interfaces;
+using Serilog;
 
 namespace Project_3
 {
@@ -21,6 +22,9 @@ namespace Project_3
         static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Host.UseSerilog((context, configuration) =>
+            configuration.ReadFrom.Configuration(context.Configuration));
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(
@@ -84,6 +88,7 @@ namespace Project_3
 
 
             // Extensions
+            //extensions
             builder.Services.AddJwtAuthentication(builder.Configuration);
             builder.Services.AddApiConfiguration();
 
@@ -124,6 +129,7 @@ namespace Project_3
             app.UseRateLimiting();
 
 
+            app.UseRequestTiming();
             app.UseAuthentication();
 
             app.UseAuthorization();
