@@ -18,16 +18,14 @@ namespace Project_3.src.Application.Services.Implementation
             private readonly IMapper _mapper;
             private readonly UserManager<User> _userManager;
             private readonly ILeaveCalculationService _leaveCalculationService;
-        public LeaveRequestService(
-            IUnitOfWork unitOfWork,
-            IMapper mapper,
-            UserManager<User> userManager,
-            ILeaveCalculationService leaveCalculationService)
+            private readonly IEmailService _emailService;
+        public LeaveRequestService(IUnitOfWork unitOfWork,IMapper mapper,UserManager<User> userManager,ILeaveCalculationService leaveCalculationService,IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userManager = userManager;
             _leaveCalculationService = leaveCalculationService;
+            _emailService = emailService;
         }
 
         public async Task<PagedResult<LeaveRequestDto>> GetAllAsync(LeaveRequestQueryParams query)
@@ -109,6 +107,23 @@ namespace Project_3.src.Application.Services.Implementation
                 request.ManagerComment = dto.ManagerComment;
                 _unitOfWork.LeaveRequests.Update(request);
                 await _unitOfWork.SaveChangesAsync();
+                await _emailService.SendEmailAsync(
+                        request.User.Email!,
+                        "Leave Request Approved",
+                        $"""
+                        Hello {request.User.UserName},
+
+                        Your leave request has been approved.
+
+                        Leave Type: {request.LeaveTypeId}
+                        From: {request.StartDate}
+                        To: {request.EndDate}
+
+                        Manager Comment:
+                        {dto.ManagerComment}
+
+                        HR Leave Management System
+                        """);
 
                 return await GetByIdAsync(id);
             }
@@ -130,7 +145,23 @@ namespace Project_3.src.Application.Services.Implementation
                 request.ManagerComment = dto.ManagerComment;
                 _unitOfWork.LeaveRequests.Update(request);
                 await _unitOfWork.SaveChangesAsync();
+                await _emailService.SendEmailAsync(
+                    request.User.Email!,
+                    "Leave Request Rejected",
+                    $"""
+                        Hello {request.User.UserName},
 
+                        Unfortunately your leave request has been rejected.
+
+                        Leave Type: {request.LeaveTypeId}
+                        From: {request.StartDate}
+                        To: {request.EndDate}
+
+                        Manager Comment:
+                        {dto.ManagerComment}
+
+                        HR Leave Management System
+                        """);
                 return await GetByIdAsync(id);
             }
 
