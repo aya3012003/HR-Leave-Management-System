@@ -30,40 +30,6 @@ namespace Project_3
 
             builder.Services.AddEndpointsApiExplorer();
 
-            //builder.Services.AddSwaggerGen(options =>
-            //{
-            //    options.SwaggerDoc("v1", new OpenApiInfo
-            //    {
-            //        Title = "Project-3 API",
-            //        Version = "v1"
-            //    });
-
-            //    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            //    {
-            //        Description = "JWT Authorization using Bearer",
-            //        Name = "Authorization",
-            //        In = ParameterLocation.Header,
-            //        Type = SecuritySchemeType.Http,
-            //        Scheme = "bearer",
-            //        BearerFormat = "JWT"
-            //    });
-
-            //    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-            //    {
-            //        {
-            //            new OpenApiSecurityScheme
-            //            {
-            //                Reference = new OpenApiReference
-            //                {
-            //                    Type = ReferenceType.SecurityScheme,
-            //                    Id = "Bearer"
-            //                }
-            //            },
-            //            Array.Empty<string>()
-            //        }
-            //    });
-            //});
-
             builder.Services.AddSwaggerDocumentation();
             // AutoMapper
             builder.Services.AddAutoMapper(typeof(MappingProfile));
