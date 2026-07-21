@@ -36,8 +36,7 @@ namespace Project_3
 
             builder.Services.AddSwaggerDocumentation();
             // AutoMapper
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
-
+            builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile).Assembly);
 
             // JWT Options
             builder.Services.Configure<JwtOptions>(
