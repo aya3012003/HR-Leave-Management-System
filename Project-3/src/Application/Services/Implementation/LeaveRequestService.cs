@@ -55,16 +55,22 @@ namespace Project_3.src.Application.Services.Implementation
 
             public async Task<LeaveRequestDto> CreateAsync(string userId, CreateLeaveRequestDto dto)
             {
-                if (dto.EndDate < dto.StartDate)
+            if (dto.EndDate < dto.StartDate )
                     throw new ValidationException("End date cannot be before start date.");
+            if (dto.StartDate < DateOnly.FromDateTime(DateTime.Today))
+                throw new ValidationException("Start date must be in future.");
 
             int workingDays = await _leaveCalculationService.CalculateLeaveDaysAsync(
                 dto.StartDate,
                 dto.EndDate); 
             if (workingDays <= 0)
                     throw new ValidationException("Leave request must contain at least one working day.");
+            bool hasOverlap = await _unitOfWork.LeaveRequests.HasOverlappingRequestAsync(userId,dto.StartDate,dto.EndDate);
 
-                var balance = await _unitOfWork.LeaveBalances.GetByUserAndLeaveTypeAsync(userId, dto.LeaveTypeId);
+            if (hasOverlap)
+                throw new ValidationException(
+                    "You already have a leave request during this period.");
+            var balance = await _unitOfWork.LeaveBalances.GetByUserAndLeaveTypeAsync(userId, dto.LeaveTypeId);
                 if (balance == null || balance.RemainingDays < workingDays)
                     throw new InsufficientLeaveBalanceException();
 

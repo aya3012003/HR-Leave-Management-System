@@ -4,6 +4,7 @@ using Project_3.src.Application.DTOs.LeaveRequestDTOs;
 using Project_3.src.Application.Models;
 using Project_3.src.Infrastructure.Data.Context;
 using Project_3.src.Infrastructure.Repositories.Interfaces;
+using Project_3.src.Infrastructure.Shared.Enums;
 
 namespace Project_3.src.Infrastructure.Repositories.Implementations
 {
@@ -47,6 +48,15 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
                 .Include(r => r.LeaveType)
                 .AsNoTracking()
                 .ToListAsync();
+        }
+        public async Task<bool> HasOverlappingRequestAsync(string userId, DateOnly startDate, DateOnly endDate)
+        {
+            return await _context.LeaveRequests.AnyAsync(r =>
+                r.UserId == userId &&
+                r.Status == LeaveStatus.Pending ||
+                r.Status == LeaveStatus.Approved &&
+                startDate <= r.EndDate &&
+                endDate >= r.StartDate);
         }
     }
 }
