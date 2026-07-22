@@ -8,5 +8,6 @@ namespace Project_3.src.Infrastructure.Repositories.Interfaces
     {
         Task<PagedResult<LeaveRequest>> GetPagedAsync(LeaveRequestQueryParams query);
         Task<IEnumerable<LeaveRequest>> GetAllWithUserDepartmentAsync();
+        Task<bool> HasOverlappingRequestAsync(string userId,DateOnly startDate,DateOnly endDate);
     }
 }
