@@ -18,16 +18,14 @@ namespace Project_3.src.Application.Services.Implementation
             private readonly IMapper _mapper;
             private readonly UserManager<User> _userManager;
             private readonly ILeaveCalculationService _leaveCalculationService;
-        public LeaveRequestService(
-            IUnitOfWork unitOfWork,
-            IMapper mapper,
-            UserManager<User> userManager,
-            ILeaveCalculationService leaveCalculationService)
+            private readonly IEmailService _emailService;
+        public LeaveRequestService(IUnitOfWork unitOfWork,IMapper mapper,UserManager<User> userManager,ILeaveCalculationService leaveCalculationService,IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userManager = userManager;
             _leaveCalculationService = leaveCalculationService;
+            _emailService = emailService;
         }
 
         public async Task<PagedResult<LeaveRequestDto>> GetAllAsync(LeaveRequestQueryParams query)
@@ -57,16 +55,22 @@ namespace Project_3.src.Application.Services.Implementation
 
             public async Task<LeaveRequestDto> CreateAsync(string userId, CreateLeaveRequestDto dto)
             {
-                if (dto.EndDate < dto.StartDate)
+            if (dto.EndDate < dto.StartDate )
                     throw new ValidationException("End date cannot be before start date.");
+            if (dto.StartDate < DateOnly.FromDateTime(DateTime.Today))
+                throw new ValidationException("Start date must be in future.");
 
             int workingDays = await _leaveCalculationService.CalculateLeaveDaysAsync(
                 dto.StartDate,
                 dto.EndDate); 
             if (workingDays <= 0)
                     throw new ValidationException("Leave request must contain at least one working day.");
+            bool hasOverlap = await _unitOfWork.LeaveRequests.HasOverlappingRequestAsync(userId,dto.StartDate,dto.EndDate);
 
-                var balance = await _unitOfWork.LeaveBalances.GetByUserAndLeaveTypeAsync(userId, dto.LeaveTypeId);
+            if (hasOverlap)
+                throw new ValidationException(
+                    "You already have a leave request during this period.");
+            var balance = await _unitOfWork.LeaveBalances.GetByUserAndLeaveTypeAsync(userId, dto.LeaveTypeId);
                 if (balance == null || balance.RemainingDays < workingDays)
                     throw new InsufficientLeaveBalanceException();
 
@@ -109,6 +113,23 @@ namespace Project_3.src.Application.Services.Implementation
                 request.ManagerComment = dto.ManagerComment;
                 _unitOfWork.LeaveRequests.Update(request);
                 await _unitOfWork.SaveChangesAsync();
+                await _emailService.SendEmailAsync(
+                        request.User.Email!,
+                        "Leave Request Approved",
+                        $"""
+                        Hello {request.User.UserName},
+
+                        Your leave request has been approved.
+
+                        Leave Type: {request.LeaveTypeId}
+                        From: {request.StartDate}
+                        To: {request.EndDate}
+
+                        Manager Comment:
+                        {dto.ManagerComment}
+
+                        HR Leave Management System
+                        """);
 
                 return await GetByIdAsync(id);
             }
@@ -130,7 +151,23 @@ namespace Project_3.src.Application.Services.Implementation
                 request.ManagerComment = dto.ManagerComment;
                 _unitOfWork.LeaveRequests.Update(request);
                 await _unitOfWork.SaveChangesAsync();
+                await _emailService.SendEmailAsync(
+                    request.User.Email!,
+                    "Leave Request Rejected",
+                    $"""
+                        Hello {request.User.UserName},
 
+                        Unfortunately your leave request has been rejected.
+
+                        Leave Type: {request.LeaveTypeId}
+                        From: {request.StartDate}
+                        To: {request.EndDate}
+
+                        Manager Comment:
+                        {dto.ManagerComment}
+
+                        HR Leave Management System
+                        """);
                 return await GetByIdAsync(id);
             }
 

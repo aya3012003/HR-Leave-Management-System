@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+
 using Project_3.src.API.Extensions;
 using Project_3.src.API.Middleware;
 using Project_3.src.Application.Mapping;
@@ -25,21 +27,38 @@ namespace Project_3
             configuration.ReadFrom.Configuration(context.Configuration));
 
             builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DefaultConnection")));
+
             builder.Services.AddControllers();
+
             builder.Services.AddEndpointsApiExplorer();
 
+            builder.Services.AddSwaggerDocumentation();
+            // AutoMapper
+            builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile).Assembly);
+
+            // JWT Options
             builder.Services.Configure<JwtOptions>(
                 builder.Configuration.GetSection("JWT"));
 
+
+            // Identity
             builder.Services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
-            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); builder.Services.AddScoped<IAuthService, AuthService>();
+
+            // Email
+            builder.Services.Configure<EmailSettings>(
+                builder.Configuration.GetSection("EmailSettings"));
+
+            builder.Services.AddScoped<IEmailService, EmailService>();
+
+
+            // Repositories
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             builder.Services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
@@ -47,6 +66,9 @@ namespace Project_3
             builder.Services.AddScoped<IEmployeeLeaveBalanceRepository, EmployeeLeaveBalanceRepository>();
             builder.Services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
 
+
+            // Services
+            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IHolidayService, HolidayService>();
             builder.Services.AddHttpClient<IHolidayApiService, HolidayApiService>();
             builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
@@ -57,21 +79,30 @@ namespace Project_3
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddScoped<ILeaveCalculationService, LeaveCalculationService>();
+
+
+            // Exception Handling
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
             builder.Services.AddProblemDetails();
+
+
+            // Extensions
             //extensions
             builder.Services.AddJwtAuthentication(builder.Configuration);
             builder.Services.AddApiConfiguration();
-            builder.Services.AddSwaggerDocumentation();
-
 
 
             var app = builder.Build();
 
+
             app.UseExceptionHandler();
 
+
+            // Seed Roles
             await app.SeedRolesAsync();
 
+
+            // Seed Data
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -82,21 +113,29 @@ namespace Project_3
                 await SeedData.Initialize(context, userManager);
             }
 
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
+
             app.UseHttpsRedirection();
-            //middleware
+
+
+            // Middleware
             app.UseRateLimiting();
+
+
             app.UseRequestTiming();
             app.UseAuthentication();
 
             app.UseAuthorization();
 
+
             app.MapControllers();
+
 
             app.Run();
         }
