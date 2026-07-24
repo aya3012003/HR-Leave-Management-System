@@ -120,7 +120,7 @@ namespace Project_3
                 app.UseSwaggerUI();
             }
 
-
+            app.UseCors("Development");
             app.UseHttpsRedirection();
 
 
