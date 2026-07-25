@@ -10,7 +10,7 @@ using System.Security.Claims;
 /// </summary>
 [ApiController]
 [Route("api/my-leave-balances")]
-[Authorize(Roles = "Employee")]
+[Authorize(Roles = "Admin,Manager,Employee")]
 public class MyLeaveBalancesController : ControllerBase
 {
     private readonly IEmployeeLeaveBalanceService _service;

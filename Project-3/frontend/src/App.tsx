@@ -23,86 +23,89 @@ import DepartmentsPage from '@/pages/departments';
 import LeaveTypesPage from '@/pages/leave-types';
 
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      refetchOnWindowFocus: false,
+    defaultOptions: {
+        queries: {
+            retry: 1,
+            // Refetch data automatically when the user clicks back into the browser tab
+            refetchOnWindowFocus: true,
+            // Auto-refresh the data in the background every 30 seconds (30000ms)
+            refetchInterval: 10000,
+        },
     },
-  },
 });
 
 function ProtectedRoute({ component: Component, roles }: { component: any, roles?: string[] }) {
-  const { isAuthenticated, user, isLoading } = useAuth();
+    const { isAuthenticated, user, isLoading } = useAuth();
 
-  if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
-  }
-
-  if (!isAuthenticated) {
-    return <Redirect to="/login" />;
-  }
-
-  if (roles && user) {
-    const hasRole = roles.some(r => user.roles.includes(r));
-    if (!hasRole) {
-      return <Redirect to="/dashboard" />;
+    if (isLoading) {
+        return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
     }
-  }
 
-  return (
-    <Shell>
-      <Component />
-    </Shell>
-  );
+    if (!isAuthenticated) {
+        return <Redirect to="/login" />;
+    }
+
+    if (roles && user) {
+        const hasRole = roles.some(r => user.roles.includes(r));
+        if (!hasRole) {
+            return <Redirect to="/dashboard" />;
+        }
+    }
+
+    return (
+        <Shell>
+            <Component />
+        </Shell>
+    );
 }
 
 function Router() {
-  const { isAuthenticated } = useAuth();
+    const { isAuthenticated } = useAuth();
 
-  return (
-    <Switch>
-      <Route path="/">
-        {isAuthenticated ? <Redirect to="/dashboard" /> : <Redirect to="/login" />}
-      </Route>
-      <Route path="/login" component={LoginPage} />
-      
-      {/* All Authenticated */}
-      <Route path="/dashboard"><ProtectedRoute component={DashboardPage} /></Route>
-      <Route path="/profile"><ProtectedRoute component={ProfilePage} /></Route>
-      <Route path="/my-leave-requests"><ProtectedRoute component={MyLeaveRequestsPage} /></Route>
-      <Route path="/my-leave-requests/new"><ProtectedRoute component={NewLeaveRequestPage} /></Route>
-      <Route path="/my-leave-balances"><ProtectedRoute component={MyLeaveBalancesPage} /></Route>
-      <Route path="/holidays"><ProtectedRoute component={HolidaysPage} /></Route>
-      
-      {/* Admin / Manager */}
-      <Route path="/leave-requests"><ProtectedRoute component={LeaveRequestsPage} roles={["Admin", "Manager"]} /></Route>
-      <Route path="/employees"><ProtectedRoute component={EmployeesPage} roles={["Admin", "Manager"]} /></Route>
-      <Route path="/employees/new"><ProtectedRoute component={EmployeeNewPage} roles={["Admin"]} /></Route>
-      <Route path="/employees/:id"><ProtectedRoute component={EmployeeDetailPage} roles={["Admin", "Manager"]} /></Route>
-      <Route path="/leave-balances"><ProtectedRoute component={LeaveBalancesPage} roles={["Admin", "Manager"]} /></Route>
-      
-      {/* Admin Only */}
-      <Route path="/departments"><ProtectedRoute component={DepartmentsPage} roles={["Admin"]} /></Route>
-      <Route path="/leave-types"><ProtectedRoute component={LeaveTypesPage} roles={["Admin"]} /></Route>
-      
-      <Route component={NotFound} />
-    </Switch>
-  );
+    return (
+        <Switch>
+            <Route path="/">
+                {isAuthenticated ? <Redirect to="/dashboard" /> : <Redirect to="/login" />}
+            </Route>
+            <Route path="/login" component={LoginPage} />
+
+            {/* All Authenticated */}
+            <Route path="/dashboard"><ProtectedRoute component={DashboardPage} /></Route>
+            <Route path="/profile"><ProtectedRoute component={ProfilePage} /></Route>
+            <Route path="/my-leave-requests"><ProtectedRoute component={MyLeaveRequestsPage} /></Route>
+            <Route path="/my-leave-requests/new"><ProtectedRoute component={NewLeaveRequestPage} /></Route>
+            <Route path="/my-leave-balances"><ProtectedRoute component={MyLeaveBalancesPage} /></Route>
+            <Route path="/holidays"><ProtectedRoute component={HolidaysPage} /></Route>
+
+            {/* Admin / Manager */}
+            <Route path="/leave-requests"><ProtectedRoute component={LeaveRequestsPage} roles={["Admin", "Manager"]} /></Route>
+            <Route path="/employees"><ProtectedRoute component={EmployeesPage} roles={["Admin", "Manager"]} /></Route>
+            <Route path="/employees/new"><ProtectedRoute component={EmployeeNewPage} roles={["Admin"]} /></Route>
+            <Route path="/employees/:id"><ProtectedRoute component={EmployeeDetailPage} roles={["Admin", "Manager"]} /></Route>
+            <Route path="/leave-balances"><ProtectedRoute component={LeaveBalancesPage} roles={["Admin", "Manager"]} /></Route>
+
+            {/* Admin Only */}
+            <Route path="/departments"><ProtectedRoute component={DepartmentsPage} roles={["Admin"]} /></Route>
+            <Route path="/leave-types"><ProtectedRoute component={LeaveTypesPage} roles={["Admin"]} /></Route>
+
+            <Route component={NotFound} />
+        </Switch>
+    );
 }
 
 function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TooltipProvider>
-          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
-            <Router />
-          </WouterRouter>
-          {/* Mocked Toast - not implemented fully to save time but wrapper exists */}
-        </TooltipProvider>
-      </AuthProvider>
-    </QueryClientProvider>
-  );
+    return (
+        <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+                <TooltipProvider>
+                    <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+                        <Router />
+                    </WouterRouter>
+                    {/* Mocked Toast - not implemented fully to save time but wrapper exists */}
+                </TooltipProvider>
+            </AuthProvider>
+        </QueryClientProvider>
+    );
 }
 
 export default App;
