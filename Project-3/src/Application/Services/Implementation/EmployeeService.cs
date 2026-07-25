@@ -82,6 +82,23 @@ namespace Project_3.src.Application.Services.Implementation
                 return null;
             }
 
+            // Initialize Leave Balances for the new employee
+            // Fetch all available leave types
+            var leaveTypes = await _context.Set<LeaveType>().ToListAsync();
+
+            // Generate a balance record for each leave type using its DefaultDays
+            var defaultBalances = leaveTypes.Select(lt => new EmployeeLeaveBalance
+            {
+                UserId = user.Id,
+                LeaveTypeId = lt.Id,
+                RemainingDays = lt.DefaultDays
+            });
+
+            // Save the new balances to the database
+            await _context.Set<EmployeeLeaveBalance>().AddRangeAsync(defaultBalances);
+            await _context.SaveChangesAsync();
+
+
             return await MapToDtoAsync(await _userManager.Users.Include(u => u.Department).FirstAsync(u => u.Id == user.Id));
         }
 

@@ -134,20 +134,26 @@ namespace Project_3.src.Infrastructure.Data.Seed
                 );
             }
 
+            // Save the Leave Types so they have IDs before we try to assign balances
             await context.SaveChangesAsync();
 
-            if (!await context.EmployeeLeaveBalances.AnyAsync())
+            // SEED BALANCES (Fixed Logic)
+            var users = await context.Users.ToListAsync();
+            var leaveTypes = await context.LeaveTypes.ToListAsync();
+
+            var balancesToAdd = new List<EmployeeLeaveBalance>();
+
+            foreach (var user in users)
             {
-                var users = await context.Users.ToListAsync();
-                var leaveTypes = await context.LeaveTypes.ToListAsync();
-
-                var balances = new List<EmployeeLeaveBalance>();
-
-                foreach (var user in users)
+                foreach (var leaveType in leaveTypes)
                 {
-                    foreach (var leaveType in leaveTypes)
+                    // Check if this specific user is missing this specific balance
+                    bool exists = await context.EmployeeLeaveBalances
+                        .AnyAsync(b => b.UserId == user.Id && b.LeaveTypeId == leaveType.Id);
+
+                    if (!exists)
                     {
-                        balances.Add(new EmployeeLeaveBalance
+                        balancesToAdd.Add(new EmployeeLeaveBalance
                         {
                             UserId = user.Id,
                             LeaveTypeId = leaveType.Id,
@@ -155,12 +161,18 @@ namespace Project_3.src.Infrastructure.Data.Seed
                         });
                     }
                 }
+            }
 
-                await context.EmployeeLeaveBalances.AddRangeAsync(balances);
-                foreach (var b in balances)
+            // Only call the database if we actually have missing balances to add
+            if (balancesToAdd.Any())
+            {
+                await context.EmployeeLeaveBalances.AddRangeAsync(balancesToAdd);
+
+                foreach (var b in balancesToAdd)
                 {
-                    Console.WriteLine($"{b.UserId} - {b.LeaveTypeId}");
+                    Console.WriteLine($"Seeded Balance: User {b.UserId} - LeaveType {b.LeaveTypeId}");
                 }
+
                 await context.SaveChangesAsync();
             }
         }

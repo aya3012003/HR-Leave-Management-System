@@ -40,11 +40,23 @@ public class EmployeesController : ControllerBase
     [HttpGet]
     [Authorize(Roles = $"{"Admin"},{"Manager"}")]
     public async Task<IActionResult> GetAll(
-        [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 10,
-        [FromQuery] int? deptId = null,
-        [FromQuery] string? search = null)
+    [FromQuery] int page = 1,
+    [FromQuery] int pageSize = 10,
+    [FromQuery] int? deptId = null,
+    [FromQuery] string? search = null)
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId == null) return Unauthorized();
+
+        var myProfile = await _employeeService.GetEmployeeProfileAsync(userId);
+
+        // Enforce department-level isolation for Managers
+        if (myProfile != null && myProfile.Roles.Contains("Manager") && !myProfile.Roles.Contains("Admin"))
+        {
+            // Force the department filter to match the manager's department
+            deptId = myProfile.DepartmentId;
+        }
+
         var result = await _employeeService.GetEmployeesAsync(page, pageSize, deptId, search);
         return Ok(result);
     }
@@ -83,6 +95,19 @@ public class EmployeesController : ControllerBase
     {
         var employee = await _employeeService.GetEmployeeByIdAsync(id);
         if (employee == null) return NotFound(new { message = "Employee not found." });
+
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var myProfile = await _employeeService.GetEmployeeProfileAsync(userId!);
+
+        // Validate that the manager is looking at someone in their own department
+        if (myProfile != null && myProfile.Roles.Contains("Manager") && !myProfile.Roles.Contains("Admin"))
+        {
+            if (employee.DepartmentId != myProfile.DepartmentId)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden,
+                    new { message = "You can only view employees within your own department." });
+            }
+        }
 
         return Ok(employee);
     }

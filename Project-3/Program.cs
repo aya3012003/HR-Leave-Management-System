@@ -87,7 +87,6 @@ namespace Project_3
 
 
             // Extensions
-            //extensions
             builder.Services.AddJwtAuthentication(builder.Configuration);
             builder.Services.AddApiConfiguration();
 
