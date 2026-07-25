@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace Project_3.src.API.Extensions
 {
@@ -25,6 +25,7 @@ namespace Project_3.src.API.Extensions
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
                 c.IncludeXmlComments(xmlPath);
 
                 const string schemeId = "Bearer";
@@ -39,6 +40,7 @@ namespace Project_3.src.API.Extensions
                     Description = "Enter: Bearer {your token}"
                 });
 
+
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -50,7 +52,7 @@ namespace Project_3.src.API.Extensions
                                 Id = schemeId
                             }
                         },
-                        new List<string>()
+                        Array.Empty<string>()
                     }
                 });
 
