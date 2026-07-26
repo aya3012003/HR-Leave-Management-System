@@ -138,6 +138,10 @@ namespace Project_3
 
 
             app.Run();
-        }
+       
     }
+    }
+}
+public partial class Program
+{
 }
