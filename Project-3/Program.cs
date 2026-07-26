@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-
 using Project_3.src.API.Extensions;
 using Project_3.src.API.Middleware;
 using Project_3.src.Application.Mapping;
@@ -124,9 +123,7 @@ namespace Project_3
 
 
             // Middleware
-            app.UseRateLimiting();
-
-
+             app.UseRateLimiting();       
             app.UseRequestTiming();
             app.UseAuthentication();
 
