@@ -38,7 +38,7 @@ public class EmployeesController : ControllerBase
     /// <response code="401">User is not authenticated.</response>
     /// <response code="403">User is not authorized.</response>
     [HttpGet]
-    [Authorize(Roles = $"{"Admin"},{"Manager"}")]
+    [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> GetAll(
     [FromQuery] int page = 1,
     [FromQuery] int pageSize = 10,
@@ -90,7 +90,7 @@ public class EmployeesController : ControllerBase
     /// <response code="401">User is not authenticated.</response>
     /// <response code="403">User is not authorized.</response>
     [HttpGet("{id}")]
-    [Authorize(Roles = $"{"Admin"},{"Manager"}")]
+    [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> GetById(string id)
     {
         var employee = await _employeeService.GetEmployeeByIdAsync(id);

@@ -140,3 +140,6 @@ namespace Project_3
         }
     }
 }
+public partial class Program
+{
+}
