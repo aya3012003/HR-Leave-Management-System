@@ -1,4 +1,6 @@
 <Solution>
-  <Project Path="../IntegrationTests/IntegrationTests.csproj" Id="f4684749-8fd0-4dae-9ec6-2aa72e10ed82" />
+  <Project Path="../IntegrationTests/IntegrationTests.csproj" Id="f4684749-8fd0-4dae-9ec6-2aa72e10ed82">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
   <Project Path="Project-3.csproj" />
 </Solution>

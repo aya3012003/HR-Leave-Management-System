@@ -15,8 +15,6 @@ namespace IntegrationTests.Testing
     public class EmployeeControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
-
-        // متغيرات للـ Caching عشان نعمل Login مرة واحدة بس
         private static string? _cachedAdminToken;
         private static string? _cachedEmployeeToken;
 
