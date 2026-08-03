@@ -11,6 +11,7 @@
 
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>$(NoWarn);1591</NoWarn>
+		<UserSecretsId>b9f4d402-ce0f-4c0f-8011-97c51a0b777e</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -32,6 +33,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.10" />
 
 		<PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />

@@ -89,6 +89,7 @@ namespace Project_3.src.Application.Services.Implementation
 
             if (department == null)
                 throw new DepartmentNotFoundException(id);
+          
 
             _unitOfWork.Departments.Delete(department);
 
