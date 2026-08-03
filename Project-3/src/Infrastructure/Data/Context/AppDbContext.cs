@@ -32,6 +32,7 @@ namespace Project_3.src.Infrastructure.Data.Context
             modelBuilder.Entity<LeaveRequest>()
                            .Property(lr => lr.Status)
                            .HasConversion<string>();
+
         }
     }
     }

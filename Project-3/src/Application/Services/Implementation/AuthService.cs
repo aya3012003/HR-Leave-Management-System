@@ -58,6 +58,19 @@ namespace Project_3.src.Application.Services.Implementation
                 await _userManager.DeleteAsync(user);//rollback
                 return roleResult;
             }
+            var leaveTypes = await _context.Set<LeaveType>().ToListAsync();
+
+            foreach (var leaveType in leaveTypes)
+            {
+                _context.EmployeeLeaveBalances.Add(new EmployeeLeaveBalance
+                {
+                    UserId = user.Id,
+                    LeaveTypeId = leaveType.Id,
+                    RemainingDays = leaveType.DefaultDays
+                });
+            }
+
+            await _context.SaveChangesAsync();
 
             return IdentityResult.Success;
         }

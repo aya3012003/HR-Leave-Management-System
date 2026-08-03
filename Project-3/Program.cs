@@ -1,16 +1,6 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Project_3.src.API.Extensions;
 using Project_3.src.API.Middleware;
-using Project_3.src.Application.Mapping;
-using Project_3.src.Application.Models;
-using Project_3.src.Application.Services.Implementation;
-using Project_3.src.Application.Services.Interfaces;
-using Project_3.src.Infrastructure.Data.Context;
-using Project_3.src.Infrastructure.Data.Seed;
-using Project_3.src.Infrastructure.identity;
-using Project_3.src.Infrastructure.Repositories.Implementations;
-using Project_3.src.Infrastructure.Repositories.Interfaces;
+using Serilog;
 
 namespace Project_3
 {
@@ -20,51 +10,24 @@ namespace Project_3
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
+            // Logging
+            builder.Host.UseSerilog((context, configuration) =>
+                configuration.ReadFrom.Configuration(context.Configuration));
+
+            // Core API Services
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerDocumentation();
 
-            builder.Services.Configure<JwtOptions>(
-                builder.Configuration.GetSection("JWT"));
-
-            builder.Services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders();
-            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
-            builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-            builder.Services.AddScoped<ILeaveTypeRepository,LeaveTypeRepository>();
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            builder.Services.AddScoped<IEmployeeLeaveBalanceRepository, EmployeeLeaveBalanceRepository>();
-
-            builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
-            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-            builder.Services.AddScoped<IEmployeeLeaveBalanceService, EmployeeLeaveBalanceService>();
-            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-            builder.Services.AddProblemDetails();
+            // Application Services via Extension Methods
+            builder.Services.AddApplicationServices(builder.Configuration);
             builder.Services.AddJwtAuthentication(builder.Configuration);
-          
+            builder.Services.AddApiConfiguration();
 
             var app = builder.Build();
 
+            // HTTP Request Pipeline
             app.UseExceptionHandler();
-
-            await app.SeedRolesAsync();
-
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-
-                var context = services.GetRequiredService<AppDbContext>();
-                var userManager = services.GetRequiredService<UserManager<User>>();
-
-                await SeedData.Initialize(context, userManager);
-            }
 
             if (app.Environment.IsDevelopment())
             {
@@ -72,14 +35,25 @@ namespace Project_3
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("Development");
             app.UseHttpsRedirection();
-            app.UseAuthentication();
 
+            // Middlewares
+            app.UseRateLimiting();
+            app.UseRequestTiming();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
+
+            // Database seeding
+            await app.SeedDatabaseAsync();
 
             app.Run();
         }
     }
 }
+
+// Preserved for integration testing
+public partial class Program { }

@@ -18,9 +18,20 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
             _dbSet = context.Set<T>();
         }
 
+        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return await query.ToListAsync();
+        }
         public async Task<T?> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes)
         {
-            IQueryable<T> query = _dbSet.AsNoTracking();
+            IQueryable<T> query = _dbSet;
 
             foreach (var include in includes)
             {
@@ -32,7 +43,7 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
 
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _dbSet.AsNoTracking().Where(predicate).ToListAsync();
+            return await _dbSet.Where(predicate).ToListAsync();
         }
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
         {
@@ -40,7 +51,7 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
         }
         public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
+            return await _dbSet.FirstOrDefaultAsync(predicate);
         }
 
         public async Task AddAsync(T entity)
@@ -56,6 +67,15 @@ namespace Project_3.src.Infrastructure.Repositories.Implementations
         public void Delete(T entity)
         {
             _dbSet.Remove(entity);
+        }
+        public async Task<int> CountAsync(Expression<Func<T, bool>>? filter = null)
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (filter != null)
+                query = query.Where(filter);
+
+            return await query.CountAsync();
         }
 
     }

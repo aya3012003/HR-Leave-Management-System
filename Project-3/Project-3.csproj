@@ -1,69 +1,44 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Project_3</RootNamespace>
-	<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-	  <NoWarn>NU1903</NoWarn>
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>Project_3</RootNamespace>
 
-  </PropertyGroup>
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+		<NoWarn>NU1903</NoWarn>
 
-  <ItemGroup>
-    <Compile Remove="src\Controllers\**" />
-    <Compile Remove="src\DTOs\**" />
-    <Compile Remove="src\ExceptionHandling\**" />
-    <Compile Remove="src\Extensions\**" />
-    <Compile Remove="src\Mapping\**" />
-    <Compile Remove="src\MiddleWares\**" />
-    <Compile Remove="src\Repositories\**" />
-    <Compile Remove="src\Services\**" />
-    <Content Remove="src\Controllers\**" />
-    <Content Remove="src\DTOs\**" />
-    <Content Remove="src\ExceptionHandling\**" />
-    <Content Remove="src\Extensions\**" />
-    <Content Remove="src\Mapping\**" />
-    <Content Remove="src\MiddleWares\**" />
-    <Content Remove="src\Repositories\**" />
-    <Content Remove="src\Services\**" />
-    <EmbeddedResource Remove="src\Controllers\**" />
-    <EmbeddedResource Remove="src\DTOs\**" />
-    <EmbeddedResource Remove="src\ExceptionHandling\**" />
-    <EmbeddedResource Remove="src\Extensions\**" />
-    <EmbeddedResource Remove="src\Mapping\**" />
-    <EmbeddedResource Remove="src\MiddleWares\**" />
-    <EmbeddedResource Remove="src\Repositories\**" />
-    <EmbeddedResource Remove="src\Services\**" />
-    <None Remove="src\Controllers\**" />
-    <None Remove="src\DTOs\**" />
-    <None Remove="src\ExceptionHandling\**" />
-    <None Remove="src\Extensions\**" />
-    <None Remove="src\Mapping\**" />
-    <None Remove="src\MiddleWares\**" />
-    <None Remove="src\Repositories\**" />
-    <None Remove="src\Services\**" />
-  </ItemGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+		<UserSecretsId>b9f4d402-ce0f-4c0f-8011-97c51a0b777e</UserSecretsId>
+	</PropertyGroup>
 
-  <ItemGroup>
-	  <PackageReference Include="AutoMapper" Version="12.0.1" />
-	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-	  <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
-	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.10">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.10">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.19.2" />
+	<ItemGroup>
+		<PackageReference Include="Asp.Versioning.Http" Version="10.0.0" />
+		<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="10.0.0" />
 
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
-  </ItemGroup>
+		<PackageReference Include="AutoMapper" Version="16.2.0" />
+		<PackageReference Include="AutoMapper.Collection" Version="13.0.0" />
+
+		<PackageReference Include="MailKit" Version="4.17.0" />
+
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.10" />
+
+		<PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
+
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.10">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.10" />
+
+		<PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
+
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+	</ItemGroup>
 
 </Project>
