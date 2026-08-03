@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Project_3.src.Application.DTOs;
 using Project_3.src.Application.DTOs.LeaveTypeDto;
@@ -11,6 +12,7 @@ namespace Project_3.src.API.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class LeaveTypesController : ControllerBase
     {
         private readonly ILeaveTypeService _service;
