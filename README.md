@@ -2,6 +2,10 @@
 
 A comprehensive Human Resources Leave Management application that streamlines leave request workflows, tracks employee leave balances, and provides real-time dashboard analytics for HR teams.
 
+# Live Demo
+
+https://vimeo.com/1212963274
+
 ## Overview
 
 The HR Leave Management System is a full-stack application designed to centralize and automate leave management processes. It enables employees to submit leave requests, managers to approve/reject requests, and HR teams to maintain comprehensive leave policies and reporting.
